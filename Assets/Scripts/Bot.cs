@@ -3,203 +3,76 @@ using UnityEngine.AI;
 
 public class Bot : MonoBehaviour
 {
-    NavMeshAgent agent;
-    public GameObject target; // El objetivo (jugador con tag "Cop")
-    Drive ds;
-    public LayerMask ignoreLayers; // Asigna los layers que quieres ignorar en el Inspector
+    public enum BotRole { Cop, Robber }
+    public BotRole botRole;
 
-    void Start()
+    private NavMeshAgent agent;
+    private Transform player;
+
+    private void Start()
     {
-        agent = this.GetComponent<NavMeshAgent>();
+        agent = GetComponent<NavMeshAgent>();
 
-        // Buscar automáticamente al objeto con el tag "Cop" y asignarlo como target
-        if (target == null)
+        // Busca al jugador al inicio
+        FindPlayer();
+
+        // Inicia el comportamiento correspondiente
+        if (botRole == BotRole.Robber)
         {
-            target = GameObject.FindGameObjectWithTag("cop");
+            InvokeRepeating("FindHidingSpot", 0f, 5f);
         }
-
-        if (target != null)
+        else if (botRole == BotRole.Cop)
         {
-            ds = target.GetComponent<Drive>();
+            InvokeRepeating("ChasePlayer", 0f, 1f);
+        }
+    }
+
+    void FindPlayer()
+    {
+        // Busca al jugador por su script
+        Player playerScript = FindFirstObjectByType<Player>();
+        if (playerScript != null)
+        {
+            player = playerScript.transform;
         }
         else
         {
-            Debug.LogError("No se encontró un objeto con el tag 'Cop'.");
+            //Debug.LogWarning("Player not found! Make sure there is a GameObject with the Player script in the scene.");
         }
     }
 
-    void Seek(Vector3 location)
+    void FindHidingSpot()
     {
-        agent.SetDestination(location);
-    }
+        GameObject[] hidingSpots = World.Instance.GetHidingSpots();
+        GameObject closestSpot = null;
+        float closestDistance = Mathf.Infinity;
 
-    void Flee(Vector3 location)
-    {
-        Vector3 fleeVector = location - this.transform.position;
-        agent.SetDestination(this.transform.position - fleeVector);
-    }
-
-    Vector3 wanderTarget = Vector3.zero;
-
-    void Wander()
-    {
-        float wanderRadius = 10;
-        float wanderDistance = 20;
-        float wanderJitter = 1;
-
-        wanderTarget += new Vector3(Random.Range(-1.0f, 1.0f) * wanderJitter, 0, Random.Range(-1.0f, 1.0f) * wanderJitter);
-
-        wanderTarget.Normalize();
-        wanderTarget *= wanderRadius;
-
-        Vector3 targetLocal = wanderTarget + new Vector3(0, 0, wanderDistance);
-        Vector3 targetWorld = this.gameObject.transform.InverseTransformVector(targetLocal);
-
-        Seek(targetWorld);
-    }
-
-    void Hide()
-    {
-        if (target == null) return;
-
-        float dist = Mathf.Infinity;
-        Vector3 chosenSpot = Vector3.zero;
-
-        for (int i = 0; i < World.Instance.GetHidingSpots().Length; i++)
+        foreach (GameObject spot in hidingSpots)
         {
-            Vector3 hideDir = World.Instance.GetHidingSpots()[i].transform.position - target.transform.position;
-            Vector3 hidePos = World.Instance.GetHidingSpots()[i].transform.position + hideDir.normalized * 10;
-
-            if (Vector3.Distance(this.transform.position, hidePos) < dist)
+            float distance = Vector3.Distance(transform.position, spot.transform.position);
+            if (distance < closestDistance)
             {
-                chosenSpot = hidePos;
-                dist = Vector3.Distance(this.transform.position, hidePos);
+                closestDistance = distance;
+                closestSpot = spot;
             }
         }
 
-        Seek(chosenSpot);
-    }
-
-    void CleverHide()
-    {
-        if (target == null) return;
-
-        float dist = Mathf.Infinity;
-        Vector3 chosenSpot = Vector3.zero;
-        Vector3 chosenDir = Vector3.zero;
-        GameObject chosenGO = World.Instance.GetHidingSpots()[0];
-
-        for (int i = 0; i < World.Instance.GetHidingSpots().Length; i++)
+        if (closestSpot != null)
         {
-            Vector3 hideDir = World.Instance.GetHidingSpots()[i].transform.position - target.transform.position;
-            Vector3 hidePos = World.Instance.GetHidingSpots()[i].transform.position + hideDir.normalized * 100;
-
-            if (Vector3.Distance(this.transform.position, hidePos) < dist)
-            {
-                chosenSpot = hidePos;
-                chosenDir = hideDir;
-                chosenGO = World.Instance.GetHidingSpots()[i];
-                dist = Vector3.Distance(this.transform.position, hidePos);
-            }
+            agent.SetDestination(closestSpot.transform.position);
         }
-
-        Collider hideCol = chosenGO.GetComponent<Collider>();
-        Ray backRay = new Ray(chosenSpot, -chosenDir.normalized);
-        RaycastHit info;
-        float distance = 250.0f;
-        hideCol.Raycast(backRay, out info, distance);
-
-        Seek(info.point + chosenDir.normalized * 2);
     }
 
-    bool CanSeeTarget()
+    void ChasePlayer()
     {
-        if (target == null) return false;
-
-        RaycastHit raycastInfo;
-        Vector3 rayToTarget = target.transform.position - this.transform.position;
-        float lookAngle = Vector3.Angle(this.transform.forward, rayToTarget);
-
-        if (lookAngle < 60)
+        if (player != null) // Verifica que el jugador esté asignado
         {
-            Debug.DrawRay(this.transform.position, rayToTarget, Color.red, 1.0f); // Dibuja el raycast en el Editor
-            if (Physics.Raycast(this.transform.position, rayToTarget, out raycastInfo))
-            {
-                if (raycastInfo.transform.gameObject.tag == "cop")
-                {
-                    Debug.Log("Te estoy viendo");
-                    return true;
-                }
-            }
+            agent.SetDestination(player.position);
         }
-        Debug.Log("No te estoy viendo");
-        return false;
-    }
-
-    bool CanSeeMe()
-    {
-        if (target == null) return false;
-
-        Vector3 rayToBot = this.transform.position - target.transform.position; // Dirección desde el jugador hacia el bot
-        float lookAngle = Vector3.Angle(target.transform.forward, rayToBot);
-
-        if (lookAngle < 60)
+        else
         {
-            return true;
-        }
-        return false;
-    }
-
-    bool coolDown = false;
-
-    void BehaviourCoolDown()
-    {
-        coolDown = false;
-        Debug.Log("Cooldown terminado");
-    }
-
-    bool TargetInRange()
-    {
-        if (target == null) return false;
-
-        if (Vector3.Distance(this.transform.position, target.transform.position) < 10)
-        {
-            return true;
-        }
-        return false;
-    }
-
-    void Update()
-    {
-        if (target == null)
-        {
-            // Si no hay target, buscar al jugador con el tag "Cop"
-            target = GameObject.FindGameObjectWithTag("cop");
-            if (target != null)
-            {
-                ds = target.GetComponent<Drive>();
-            }
-            return;
-        }
-
-        if (!coolDown)
-        {
-            if (!TargetInRange())
-            {
-                Wander();
-            }
-            else if (CanSeeTarget() && CanSeeMe())
-            {
-                Debug.Log("Escondiéndome...");
-                CleverHide();
-                coolDown = true;
-                Invoke("BehaviourCoolDown", 5); // Reinicia el cooldown después de 5 segundos
-            }
-            else
-            {
-                Debug.Log("Buscando un lugar para esconderme...");
-                Hide();
-            }
+            //Debug.LogWarning("Player reference is null. Trying to find player again...");
+            FindPlayer(); // Intenta encontrar al jugador nuevamente
         }
     }
 }

@@ -1,20 +1,32 @@
 using UnityEngine;
 
-public sealed class World 
+public sealed class World
 {
     private static readonly World instance = new World();
-    private static GameObject[] hidingSpots;
+    private GameObject[] hidingSpots;
 
-    static World(){
+    // Constructor privado para evitar la instanciación externa
+    private World()
+    {
+        // Busca los hiding spots al inicializar la instancia
         hidingSpots = GameObject.FindGameObjectsWithTag("hide");
     }
-    private World(){ }
 
-    public static World Instance{
-        get {return instance;}
+    // Propiedad para acceder a la instancia singleton
+    public static World Instance
+    {
+        get { return instance; }
     }
 
-    public GameObject[] GetHidingSpots(){
+    // Método para obtener los hiding spots
+    public GameObject[] GetHidingSpots()
+    {
         return hidingSpots;
+    }
+
+    // Método para actualizar los hiding spots (opcional)
+    public void UpdateHidingSpots()
+    {
+        hidingSpots = GameObject.FindGameObjectsWithTag("hide");
     }
 }

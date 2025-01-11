@@ -6,8 +6,8 @@ TagManager:
   tags:
   - hide
   - Cop
-  - cop
-  - robber
+  - Robber
+  - Money
   layers:
   - Default
   - TransparentFX

@@ -1,72 +1,94 @@
-using TMPro;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    public float timeLimit = 60.0f; 
-    private float currentTime;
-    public TextMeshProUGUI messageText; // Para mensajes como "¡Atrapa todos los ladrones!"
-    public GameObject messagePanel; // Panel que contiene el mensaje
-    public TextMeshProUGUI timerText; // Para mostrar el tiempo restante
+    public static GameManager Instance;
+
+    public enum GameState
+    {
+        MainMenu,
+        Playing,
+        Paused,
+        GameOver,
+        LevelComplete
+    }
+
+    public GameState currentState = GameState.MainMenu;
+    public PlayerRole playerRole; // Rol seleccionado por el jugador
+
+    private int currentLevel = 1;
+    private int robbersCaught = 0;
+
+    void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject); // Persistir entre escenas
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
 
     void Start()
     {
-        currentTime = timeLimit;
-
-        // Mostrar el mensaje inicial
-        ShowMessage("¡Atrapa todos los ladrones!", 2.0f); // Muestra el mensaje durante 2 segundos
-
-        // Inicializar el texto del temporizador
-        UpdateTimerText();
+        StartGame();
     }
 
-    void Update()
+    void StartGame()
     {
-        // Actualizar el tiempo restante
-        currentTime -= Time.deltaTime;
+        currentState = GameState.Playing;
+        LevelManager.Instance.InitializeLevel(currentLevel);
+    }
 
-        // Actualizar el texto del temporizador en cada frame
-        UpdateTimerText();
-
-        // Verificar si el tiempo se ha agotado
-        if (currentTime <= 0)
+    public void RobberCaught()
+    {
+        if (playerRole == PlayerRole.Cop)
         {
-            currentTime = 0; // Asegurarse de que no sea negativo
+            robbersCaught++;
+            if (robbersCaught >= LevelManager.Instance.robbersPerLevel)
+            {
+                LevelComplete();
+            }
+        }
+    }
+
+
+
+    public void PlayerCaught()
+    {
+        if (playerRole == PlayerRole.Robber)
+        {
             GameOver();
         }
     }
 
+   public void LevelComplete()
+    {
+        currentState = GameState.LevelComplete;
+       // Debug.Log("¡Nivel completado!");
+        currentLevel++;
+        LevelManager.Instance.InitializeLevel(currentLevel); // Iniciar el siguiente nivel
+    }
+
     void GameOver()
     {
-        Debug.Log("¡Tiempo agotado! Game Over.");
-        ShowMessage("¡Tiempo agotado! Game Over.", 3.0f); // Muestra el mensaje de Game Over durante 3 segundos
+        currentState = GameState.GameOver;
+       // Debug.Log("¡Game Over! Reiniciando nivel...");
+        LevelManager.Instance.InitializeLevel(currentLevel); // Reiniciar el nivel actual
     }
 
-    // Método para mostrar un mensaje durante un tiempo específico
-    void ShowMessage(string message, float duration)
+    public void PauseGame()
     {
-        // Activar el panel y establecer el mensaje
-        messagePanel.SetActive(true);
-        messageText.text = message;
-
-        // Desactivar el panel después de "duration" segundos
-        Invoke("HideMessage", duration);
+        currentState = GameState.Paused;
+        Time.timeScale = 0;
     }
 
-    // Método para ocultar el panel
-    void HideMessage()
+    public void ResumeGame()
     {
-        messagePanel.SetActive(false);
-    }
-
-    // Método para actualizar el texto del temporizador
-    void UpdateTimerText()
-    {
-        // Formatear el tiempo en minutos y segundos
-        int minutes = Mathf.FloorToInt(currentTime / 60);
-        int seconds = Mathf.FloorToInt(currentTime % 60);
-
-        // Actualizar el texto del temporizador
-        timerText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
+        currentState = GameState.Playing;
+        Time.timeScale = 1;
     }
 }

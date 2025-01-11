@@ -4,12 +4,20 @@ public class LevelManager : MonoBehaviour
 {
     public static LevelManager Instance;
 
-    public int currentLevel = 1; // Nivel actual
-    public int robbersPerLevel = 3; // Cantidad de robbers por nivel
-    public GameObject robberPrefab; // Prefab del robber
-    public Transform spawnArea; // Referencia al plano que define el área de spawn
+    public GameObject copPrefab;
+    public GameObject robberPrefab;
+    public GameObject moneyPrefab;
+    public Transform spawnArea;
 
-    public int robbersCaught = 0; // Contador de robbers atrapados
+    // Nueva variable para la posición de spawn del jugador
+    public Transform playerSpawnPosition;
+
+    public int robbersPerLevel = 3;
+    public int moneyPerLevel = 5;
+    public int copsPerLevel = 2;
+
+    private int robbersLeft; // Ladrones restantes
+    private int moneyLeft;   // Dinero recolectado
 
     void Awake()
     {
@@ -23,24 +31,87 @@ public class LevelManager : MonoBehaviour
         }
     }
 
-    void Start()
+    public void InitializeLevel(int level)
     {
-        StartLevel();
+        // Configurar la dificultad según el nivel
+        robbersPerLevel = 3 + level;
+        moneyPerLevel = 5 + level;
+        copsPerLevel = 2 + level;
+
+        // Inicializar ladrones restantes y dinero recolectado
+        robbersLeft = robbersPerLevel;
+        moneyLeft = 0;
+
+        // Limpiar el nivel anterior (opcional)
+        ClearLevel();
+
+        // Inicializar el nivel según el rol del jugador
+        if (GameSettings.Instance.PlayerRole == PlayerRole.Cop)
+        {
+            InitializeCopMode();
+        }
+        else
+        {
+            InitializeRobberMode();
+        }
     }
 
-    void StartLevel()
+    void InitializeCopMode()
     {
-        robbersCaught = 0;
-        SpawnRobbers();
-    }
+        // Spawnear al jugador como policía
+        GameObject player = Instantiate(copPrefab, playerSpawnPosition.position, playerSpawnPosition.rotation);
+        AssignPlayerScript(player);
 
-    void SpawnRobbers()
-    {
+        // Spawnear robbers bots
         for (int i = 0; i < robbersPerLevel; i++)
         {
-            Vector3 randomPosition = GetRandomPositionOnPlane();
-            Instantiate(robberPrefab, randomPosition, Quaternion.identity);
+            GameObject robber = Instantiate(robberPrefab, GetRandomPositionOnPlane(), Quaternion.identity);
+            AssignBotScript(robber, Bot.BotRole.Robber); // Assign bot script to robbers
         }
+    }
+
+    void InitializeRobberMode()
+    {
+        // Spawnear al jugador como ladrón en la posición de spawn
+        GameObject player = Instantiate(robberPrefab, playerSpawnPosition.position, playerSpawnPosition.rotation);
+        AssignPlayerScript(player);
+
+        // Spawnear dinero
+        for (int i = 0; i < moneyPerLevel; i++)
+        {
+            Instantiate(moneyPrefab, GetRandomPositionOnPlane(), Quaternion.identity);
+        }
+
+        // Spawnear cops bots
+        for (int i = 0; i < copsPerLevel; i++)
+        {
+            GameObject cop = Instantiate(copPrefab, GetRandomPositionOnPlane(), Quaternion.identity);
+            AssignBotScript(cop, Bot.BotRole.Cop); // Assign bot script to cops
+        }
+    }
+
+    void AssignPlayerScript(GameObject character)
+    {
+        // Asignar el script Player
+        Player playerScript = character.AddComponent<Player>();
+
+        // Configurar el rol del jugador
+        playerScript.role = (GameSettings.Instance.PlayerRole == PlayerRole.Cop) ? Player.PlayerRole.Cop : Player.PlayerRole.Robber;
+    }
+
+    void AssignBotScript(GameObject character, Bot.BotRole role)
+    {
+        // Asignar el script Bot y configurar el NavMeshAgent
+        Bot botScript = character.AddComponent<Bot>();
+        UnityEngine.AI.NavMeshAgent agent = character.GetComponent<UnityEngine.AI.NavMeshAgent>();
+
+        if (agent == null)
+        {
+            agent = character.AddComponent<UnityEngine.AI.NavMeshAgent>();
+        }
+
+        // Configurar el rol del bot
+        botScript.botRole = role;
     }
 
     Vector3 GetRandomPositionOnPlane()
@@ -58,15 +129,13 @@ public class LevelManager : MonoBehaviour
 
         do
         {
-            // Calcular una posición aleatoria dentro del área del plano
             float randomX = Random.Range(-planeSize.x / 2, planeSize.x / 2);
             float randomZ = Random.Range(-planeSize.z / 2, planeSize.z / 2);
             randomPosition = new Vector3(randomX, 0, randomZ) + spawnArea.position;
 
-            // Verificar si la posición está libre
-            positionIsValid = !Physics.CheckSphere(randomPosition, 1.0f); // 1.0f es el radio de verificación
+            positionIsValid = !Physics.CheckSphere(randomPosition, 1.0f);
             attempts++;
-        } while (!positionIsValid && attempts < 10); // Intentar hasta 10 veces
+        } while (!positionIsValid && attempts < 10);
 
         if (!positionIsValid)
         {
@@ -76,34 +145,62 @@ public class LevelManager : MonoBehaviour
         return randomPosition;
     }
 
-    public void RobberCaught()
+    void ClearLevel()
     {
-        robbersCaught++;
-        if (robbersCaught >= robbersPerLevel)
+        // Destruir todos los objetos del nivel anterior (opcional)
+        foreach (GameObject obj in GameObject.FindGameObjectsWithTag("Robber"))
         {
-            Debug.Log("¡Nivel completado!");
-            NextLevel();
+            Destroy(obj);
+        }
+        foreach (GameObject obj in GameObject.FindGameObjectsWithTag("Cop"))
+        {
+            Destroy(obj);
+        }
+        foreach (GameObject obj in GameObject.FindGameObjectsWithTag("Money"))
+        {
+            Destroy(obj);
         }
     }
 
-    void NextLevel()
+    public void RobberCaught()
     {
-        currentLevel++;
-        robbersPerLevel++; // Más robbers
+        robbersLeft--; // Restar un ladrón
+        Debug.Log("Robbers Left: " + robbersLeft);
 
-        // Buscar todos los Robbers en la escena sin un orden específico
-        Robber[] robbers = FindObjectsByType<Robber>(FindObjectsSortMode.None);
-
-        // Recorrer la lista de Robbers y aumentar su velocidad
-        foreach (var robber in robbers)
+        // Actualizar el Canvas (si tienes un UIManager)
+        if (UIManager.Instance != null)
         {
-            UnityEngine.AI.NavMeshAgent agent = robber.GetComponent<UnityEngine.AI.NavMeshAgent>();
-            if (agent != null)
-            {
-                agent.speed += 1.0f; // Aumentar velocidad
-            }
+            UIManager.Instance.UpdateRobbersLeft(robbersLeft);
         }
 
-        StartLevel();
+        // Verificar si todos los ladrones han sido atrapados
+        if (robbersLeft <= 0)
+        {
+            UIManager.Instance.ShowMessage("¡Todos los ladrones han sido atrapados!", 2);
+            GameManager.Instance.LevelComplete(); // Subir de nivel
+            robbersLeft = robbersPerLevel;
+            UIManager.Instance.UpdateMoneyUI(moneyLeft);
+        }
+    }
+
+    public void MoneyCaught()
+    {
+        moneyLeft++; // Incrementar el dinero recolectado
+        Debug.Log("Dinero recolectado: " + moneyLeft);
+
+        // Actualizar el Canvas (si tienes un UIManager)
+        if (UIManager.Instance != null)
+        {
+            UIManager.Instance.UpdateMoneyUI(moneyLeft);
+        }
+
+        // Verificar si se ha recolectado todo el dinero
+        if (moneyLeft >= moneyPerLevel)
+        {
+            UIManager.Instance.ShowMessage("¡Has recolectado todo el dinero!", 2);
+            GameManager.Instance.LevelComplete(); // Subir de nivel
+            moneyLeft = 0;
+            UIManager.Instance.UpdateMoneyUI(moneyLeft);
+        }
     }
 }
