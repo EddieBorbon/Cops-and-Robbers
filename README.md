@@ -1,7 +1,7 @@
 # 🚓 Cops and Robbers  
 ### 🤖 *Autonomous Agent Simulation*
 
- ![Cover](covercoprobbers.jpg)
+ ![Cover](covercoprobbers.png)
 ---
 
 ## 📖 Description
