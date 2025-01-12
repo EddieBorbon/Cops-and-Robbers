@@ -679,6 +679,7 @@ MonoBehaviour:
   playerRole: 0
   currentLevel: 1
   robbersCaught: 0
+  moneyCaught: 0
 --- !u!4 &184958985
 Transform:
   m_ObjectHideFlags: 0
@@ -1038,6 +1039,51 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 205751040}
   m_CullTransparentMesh: 1
+--- !u!1 &254221527
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 254221529}
+  - component: {fileID: 254221528}
+  m_Layer: 0
+  m_Name: CameraManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &254221528
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 254221527}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e7b6931047f474846a7109d991d382fa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  thirdPersonCamera: {fileID: 6686757784577006760}
+--- !u!4 &254221529
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 254221527}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -13.589704, y: 2.9573646, z: -8.679545}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &276594390
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1482,6 +1528,97 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1.0229999, y: 2.4127607, z: 1.0229999}
   m_Center: {x: 0, y: 1.2063804, z: 0}
+--- !u!1 &398133697
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 398133699}
+  - component: {fileID: 398133698}
+  m_Layer: 0
+  m_Name: TimeManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &398133698
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 398133697}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e0b472b2d36f3c4c87912ae00e61fdf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  timerDuration: 60
+  currentTime: 0
+--- !u!4 &398133699
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 398133697}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -13.589704, y: 2.9573646, z: -8.679545}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &410261236
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 410261238}
+  - component: {fileID: 410261237}
+  m_Layer: 0
+  m_Name: GameStateManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &410261237
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 410261236}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c737d623d87303145ab9a1964fb18864, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameOverPanel: {fileID: 0}
+--- !u!4 &410261238
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 410261236}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -13.589704, y: 2.9573646, z: -8.679545}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &424188585
 GameObject:
   m_ObjectHideFlags: 0
@@ -2196,9 +2333,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 600587634}
-        m_TargetAssemblyTypeName: RestartGame, Assembly-CSharp
-        m_MethodName: restartGame
+      - m_Target: {fileID: 184958984}
+        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
+        m_MethodName: RestartGame
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2888,6 +3025,150 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -4216859302048453862, guid: 359ce2089411d416980ba3b75f58cdc0, type: 3}
   m_PrefabInstance: {fileID: 737043742}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &740069184
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 740069186}
+  - component: {fileID: 740069185}
+  m_Layer: 0
+  m_Name: UIManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &740069185
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 740069184}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ad0f3d69f39d0a4e8b20ed82742da50, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moneyRobbersText: {fileID: 1040674252}
+  pauseMenu: {fileID: 1480985111}
+  gameOverMenu: {fileID: 424188585}
+  timerText: {fileID: 172115996}
+  levelText: {fileID: 121111671}
+--- !u!4 &740069186
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 740069184}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -13.589704, y: 2.9573646, z: -8.679545}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &810052715
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 810052717}
+  - component: {fileID: 810052716}
+  m_Layer: 0
+  m_Name: PlayerManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &810052716
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 810052715}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 882a43a3b18b00744ab0b19d850c3f11, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  copPrefab: {fileID: 3325594924794441011, guid: 1386c98c0d416ee45ad8f3d357525a5b, type: 3}
+  robberPrefab: {fileID: 7438494788967298231, guid: 812eb7021b0ee594a86de7f21a4385da, type: 3}
+  spawnAreaCenter: {x: 0, y: 0, z: 0}
+  spawnAreaSize: {x: 50, y: 50}
+--- !u!4 &810052717
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 810052715}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -13.589704, y: 2.9573646, z: -8.679545}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &937191537
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 937191539}
+  - component: {fileID: 937191538}
+  m_Layer: 0
+  m_Name: MoneyManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &937191538
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 937191537}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad0973dafec26d549ab354336bab4443, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moneyPrefab: {fileID: 9115471125530405564, guid: 0bdeaec5bd12a134592087abf21b83e5, type: 3}
+  spawnAreaCenter: {x: 0, y: 0, z: 0}
+  spawnAreaSize: {x: 50, y: 50}
+--- !u!4 &937191539
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 937191537}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -13.589704, y: 2.9573646, z: -8.679545}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &995925857
 GameObject:
   m_ObjectHideFlags: 0
@@ -3489,18 +3770,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b213d3b3e9f0ea47bf56a9c86315c39, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  copPrefab: {fileID: 3325594924794441011, guid: 1386c98c0d416ee45ad8f3d357525a5b, type: 3}
-  robberPrefab: {fileID: 7438494788967298231, guid: 812eb7021b0ee594a86de7f21a4385da, type: 3}
-  moneyPrefab: {fileID: 9115471125530405564, guid: 0bdeaec5bd12a134592087abf21b83e5, type: 3}
-  spawnAreaCenter: {x: 0, y: 0, z: 0}
-  spawnAreaSize: {x: 50, y: 50}
-  thirdPersonCamera: {fileID: 6686757784577006760}
+  playerManager: {fileID: 810052716}
+  botManager: {fileID: 2138212166}
+  moneyManager: {fileID: 937191538}
+  cameraManager: {fileID: 254221528}
+  timerManager: {fileID: 398133698}
+  uiManager: {fileID: 740069185}
+  gameStateManager: {fileID: 410261237}
   robbersPerLevel: 2
   moneyPerLevel: 5
   copsPerLevel: 2
-  gameOverPanel: {fileID: 424188585}
-  timerDuration: 60
-  currentTime: 0
 --- !u!4 &1145765824
 Transform:
   m_ObjectHideFlags: 0
@@ -5164,7 +5443,6 @@ GameObject:
   - component: {fileID: 1682783241}
   - component: {fileID: 1682783240}
   - component: {fileID: 1682783239}
-  - component: {fileID: 1682783238}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -5194,23 +5472,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
---- !u!114 &1682783238
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1682783236}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6ad0f3d69f39d0a4e8b20ed82742da50, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  moneyRobbersText: {fileID: 1040674252}
-  pauseMenu: {fileID: 1480985111}
-  gameOverMenu: {fileID: 424188585}
-  timerText: {fileID: 172115996}
-  levelText: {fileID: 121111671}
 --- !u!114 &1682783239
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6386,6 +6647,54 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -4216859302048453862, guid: 359ce2089411d416980ba3b75f58cdc0, type: 3}
   m_PrefabInstance: {fileID: 2102838009}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &2138212165
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2138212167}
+  - component: {fileID: 2138212166}
+  m_Layer: 0
+  m_Name: BotManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &2138212166
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2138212165}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 85d08107c2c6f17429d0fcf853bb7d07, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  copPrefab: {fileID: 3325594924794441011, guid: 1386c98c0d416ee45ad8f3d357525a5b, type: 3}
+  robberPrefab: {fileID: 7438494788967298231, guid: 812eb7021b0ee594a86de7f21a4385da, type: 3}
+  spawnAreaCenter: {x: 0, y: 0, z: 0}
+  spawnAreaSize: {x: 50, y: 50}
+--- !u!4 &2138212167
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2138212165}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -13.589704, y: 2.9573646, z: -8.679545}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &2155347803434677338
 Transform:
   m_ObjectHideFlags: 0
@@ -6527,3 +6836,10 @@ SceneRoots:
   - {fileID: 2155347803434677338}
   - {fileID: 1644747599}
   - {fileID: 51371507}
+  - {fileID: 810052717}
+  - {fileID: 2138212167}
+  - {fileID: 937191539}
+  - {fileID: 254221529}
+  - {fileID: 398133699}
+  - {fileID: 740069186}
+  - {fileID: 410261238}

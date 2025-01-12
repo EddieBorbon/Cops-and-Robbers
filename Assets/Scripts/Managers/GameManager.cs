@@ -19,6 +19,7 @@ public class GameManager : MonoBehaviour
 
     public int currentLevel = 1;
     public int robbersCaught = 0;
+    public int moneyCaught = 0;
 
     void Awake()
     {
@@ -41,17 +42,28 @@ public class GameManager : MonoBehaviour
     void StartGame()
     {
         currentState = GameState.Playing;
+        LevelManager.Instance.InitializeLevel(currentLevel); // Iniciar el primer nivel
     }
-
-
 
     public void RobberCaught()
     {
         if (playerRole == PlayerRole.Cop)
         {
             robbersCaught++;
+            UIManager.Instance.UpdateRobbersLeft(robbersCaught);
             if (robbersCaught >= LevelManager.Instance.robbersPerLevel)
             {
+                LevelComplete();
+            }
+        }
+    }
+
+    public void MoneyCaught(){
+        if(playerRole == PlayerRole.Robber){
+            moneyCaught++;
+            Debug.Log(moneyCaught);
+            UIManager.Instance.UpdateMoneyUI(moneyCaught);
+            if(moneyCaught >= LevelManager.Instance.moneyPerLevel){
                 LevelComplete();
             }
         }
@@ -61,29 +73,46 @@ public class GameManager : MonoBehaviour
     {
         if (playerRole == PlayerRole.Robber)
         {
-            UIManager.Instance.ShowGameOverMenu();
+            GameOver();
         }
     }
 
-   public void LevelComplete()
+    public void LevelComplete()
     {
         currentState = GameState.LevelComplete;
-       // Debug.Log("¡Nivel completado!");
         currentLevel++;
-        UIManager.Instance.UpdateLevel(currentLevel);
+        UIManager.Instance.UpdateLevel(currentLevel); // Actualizar la UI del nivel
         LevelManager.Instance.InitializeLevel(currentLevel); // Iniciar el siguiente nivel
-        LevelManager.Instance.currentTime = 60f;
+    }
+
+    public void GameOver()
+    {
+        currentState = GameState.GameOver;
+        UIManager.Instance.ShowGameOverMenu(); // Mostrar el menú de Game Over
+        Time.timeScale = 0; // Pausar el juego
     }
 
     public void PauseGame()
     {
         currentState = GameState.Paused;
-        Time.timeScale = 0;
+        Time.timeScale = 0; // Pausar el juego
     }
 
     public void ResumeGame()
     {
         currentState = GameState.Playing;
-        Time.timeScale = 1;
+        Time.timeScale = 1; // Reanudar el juego
+    }
+
+    public void RestartGame()
+    {
+        currentState = GameState.Playing;
+        Time.timeScale = 1; // Reanudar el tiempo
+        SceneManager.LoadScene("MainScene"); // Cambia "MainScene" por el nombre de tu escena principal
+    }
+
+    public void QuitGame()
+    {
+        Application.Quit(); // Salir del juego
     }
 }

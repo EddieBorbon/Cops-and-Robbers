@@ -169,7 +169,7 @@ public class Player : MonoBehaviour
         {
             canCatchRobber = false; // Activar cooldown
             Debug.Log("¡Robber atrapado!");
-            LevelManager.Instance.RobberCaught(); // Notificar al LevelManager
+            GameManager.Instance.RobberCaught(); // Notificar al LevelManager
             Destroy(target); // Eliminar al robber
             Invoke("ResetRobberCatch", 1.0f); // Reactivar la captura después de 1 segundo
         }
@@ -197,21 +197,23 @@ public class Player : MonoBehaviour
         {
             Debug.Log("Player Atrapado");
             // Llamar al Game Over
-            LevelManager.Instance.GameOver();
+            GameManager.Instance.GameOver();
         }
 
         // Verificar si el jugador entró en un trigger con el tag "Money" o "Robber"
         if (other.CompareTag("Money") && canPickupMoney && role == PlayerRole.Robber)
         {
             canPickupMoney = false; // Activar cooldown
-            LevelManager.Instance.MoneyCaught(); // Notificar al LevelManager
+            Debug.Log("Dinero Atrapado");
+            GameManager.Instance.MoneyCaught(); // Notificar al LevelManager
             Destroy(other.gameObject); // Destruir el objeto de dinero
             Invoke("ResetMoneyPickup", 1.0f); // Reactivar la recolección después de 1 segundo
         }
         else if (other.CompareTag("Robber") && role == PlayerRole.Cop && canCatchRobber)
         {
             canCatchRobber = false; // Activar cooldown
-            LevelManager.Instance.RobberCaught(); // Notificar al LevelManager
+            Debug.Log("Ladron Atrapado");
+            GameManager.Instance.RobberCaught(); // Notificar al LevelManager
             Destroy(other.gameObject); // Destruir al robber
             Invoke("ResetRobberCatch", 1.0f); // Reactivar la captura después de 1 segundo
         }
