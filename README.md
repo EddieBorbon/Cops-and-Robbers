@@ -8,7 +8,7 @@
 
 *Cops and Robbers* is a Unity-based game that demonstrates the use of **autonomous agents** powered by Unity's **NavMesh system**. The game involves two AI-controlled roles: **Cops** and **Robbers**, dynamically interacting within a defined environment. The bots showcase intelligent behaviors such as hiding, pursuing, and evading.
 
-Live DEMO [https://play.unity.com/en/games/039f0071-3a3b-42eb-801d-4e284cbf0c56/cops-and-robbers](https://play.unity.com/en/games/039f0071-3a3b-42eb-801d-4e284cbf0c56/cops-and-robbers)
+[Live DEMO](https://play.unity.com/en/games/039f0071-3a3b-42eb-801d-4e284cbf0c56/cops-and-robbers)
 ---
 
 ## ✨ Features
