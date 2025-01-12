@@ -1042,6 +1042,7 @@ GameObject:
   - component: {fileID: 2386807803222631717}
   - component: {fileID: 6619200631590883955}
   - component: {fileID: 3608159030416973492}
+  - component: {fileID: 7448562096975462623}
   m_Layer: 0
   m_Name: Body
   m_TagString: Untagged
@@ -1117,6 +1118,27 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &7448562096975462623
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4813607397743516712}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 2, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &4873713849602413127
 GameObject:
   m_ObjectHideFlags: 0
@@ -1448,7 +1470,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7423567203501390115}
   - component: {fileID: 8565348304222408480}
-  - component: {fileID: -3087068771243851211}
+  - component: {fileID: 132010646920221866}
   m_Layer: 0
   m_Name: Robber
   m_TagString: Robber
@@ -1465,7 +1487,7 @@ Transform:
   m_GameObject: {fileID: 7438494788967298231}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0.66, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1492,10 +1514,10 @@ CapsuleCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.53
-  m_Height: 2.33
+  m_Height: 2.19
   m_Direction: 1
-  m_Center: {x: 0, y: 0.72, z: 0}
---- !u!54 &-3087068771243851211
+  m_Center: {x: 0, y: 2.12, z: 0}
+--- !u!54 &132010646920221866
 Rigidbody:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1546,8 +1568,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7654464796460211274}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.65, z: 0}
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
+  m_LocalPosition: {x: 0, y: 1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1557,7 +1579,7 @@ Transform:
   - {fileID: 8787392313652241645}
   - {fileID: 741423331900860703}
   m_Father: {fileID: 7423567203501390115}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!1 &7883028100217613495
 GameObject:
   m_ObjectHideFlags: 0
@@ -1569,7 +1591,6 @@ GameObject:
   - component: {fileID: 6578864553636451486}
   - component: {fileID: 4435425970095821858}
   - component: {fileID: 3099900484223740048}
-  - component: {fileID: 4321181439716952348}
   m_Layer: 0
   m_Name: Buckle
   m_TagString: Untagged
@@ -1645,27 +1666,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &4321181439716952348
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7883028100217613495}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &8280795182325733932
 GameObject:
   m_ObjectHideFlags: 0

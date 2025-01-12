@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -16,8 +17,8 @@ public class GameManager : MonoBehaviour
     public GameState currentState = GameState.MainMenu;
     public PlayerRole playerRole; // Rol seleccionado por el jugador
 
-    private int currentLevel = 1;
-    private int robbersCaught = 0;
+    public int currentLevel = 1;
+    public int robbersCaught = 0;
 
     void Awake()
     {
@@ -40,8 +41,9 @@ public class GameManager : MonoBehaviour
     void StartGame()
     {
         currentState = GameState.Playing;
-        LevelManager.Instance.InitializeLevel(currentLevel);
     }
+
+
 
     public void RobberCaught()
     {
@@ -55,13 +57,11 @@ public class GameManager : MonoBehaviour
         }
     }
 
-
-
     public void PlayerCaught()
     {
         if (playerRole == PlayerRole.Robber)
         {
-            GameOver();
+            UIManager.Instance.ShowGameOverMenu();
         }
     }
 
@@ -70,14 +70,9 @@ public class GameManager : MonoBehaviour
         currentState = GameState.LevelComplete;
        // Debug.Log("¡Nivel completado!");
         currentLevel++;
+        UIManager.Instance.UpdateLevel(currentLevel);
         LevelManager.Instance.InitializeLevel(currentLevel); // Iniciar el siguiente nivel
-    }
-
-    void GameOver()
-    {
-        currentState = GameState.GameOver;
-       // Debug.Log("¡Game Over! Reiniciando nivel...");
-        LevelManager.Instance.InitializeLevel(currentLevel); // Reiniciar el nivel actual
+        LevelManager.Instance.currentTime = 60f;
     }
 
     public void PauseGame()

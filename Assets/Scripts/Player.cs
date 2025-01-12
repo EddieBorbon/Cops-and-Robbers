@@ -9,8 +9,8 @@ public class Player : MonoBehaviour
     }
 
     public PlayerRole role; // Rol del jugador (Cop o Robber)
-    public float moveSpeed = 5.0f; // Velocidad de movimiento del jugador
-    public float rotationSpeed = 10.0f; // Velocidad de rotación del jugador
+    public float moveSpeed = 10.0f; // Velocidad de movimiento del jugador
+    public float rotationSpeed = 100.0f; // Velocidad de rotación del jugador
     public float detectionRange = 10.0f; // Rango de detección del objetivo
     public float catchRange = 2.0f; // Rango para atrapar o interactuar
     public LayerMask targetLayer; // Capa para detectar objetivos
@@ -35,7 +35,7 @@ public class Player : MonoBehaviour
 
         if (target == null)
         {
-           // Debug.LogWarning("No se encontró un objetivo para el jugador.");
+            Debug.LogWarning("No se encontró un objetivo para el jugador.");
         }
     }
 
@@ -61,19 +61,22 @@ public class Player : MonoBehaviour
 
     void HandleMovement()
     {
-        float moveHorizontal = Input.GetAxis("Horizontal");
-        float moveVertical = Input.GetAxis("Vertical");
+        // Obtener la entrada del jugador
+        float moveHorizontal = Input.GetAxis("Horizontal"); // Teclas A/D o flechas izquierda/derecha
+        float moveVertical = Input.GetAxis("Vertical"); // Teclas W/S o flechas arriba/abajo
 
-        Vector3 movement = new Vector3(moveHorizontal, 0.0f, moveVertical).normalized;
-
+        // Movimiento hacia adelante y atrás
+        Vector3 movement = new Vector3(0.0f, 0.0f, moveVertical).normalized; // Solo eje Z
         if (movement != Vector3.zero)
         {
-            // Rotar hacia la dirección del movimiento
-            Quaternion targetRotation = Quaternion.LookRotation(movement);
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+            transform.position += transform.TransformDirection(movement) * moveSpeed * Time.deltaTime;
+        }
 
-            // Mover al jugador
-            transform.Translate(movement * moveSpeed * Time.deltaTime, Space.World);
+        // Rotación en el eje Y (izquierda y derecha)
+        if (moveHorizontal != 0)
+        {
+            float rotationAmount = moveHorizontal * rotationSpeed * Time.deltaTime;
+            transform.Rotate(0, rotationAmount, 0); // Rotar solo en el eje Y
         }
     }
 
@@ -108,7 +111,7 @@ public class Player : MonoBehaviour
             {
                 if (CanSeeTarget() && CanSeeMe())
                 {
-                    //Debug.Log("Escondiéndome...");
+                    Debug.Log("Escondiéndome...");
                     coolDown = true;
                     Invoke("BehaviourCoolDown", 5); // Reiniciar el cooldown después de 5 segundos
                 }
@@ -131,12 +134,12 @@ public class Player : MonoBehaviour
             {
                 if (raycastInfo.transform.gameObject.tag == "Cop" && role == PlayerRole.Robber)
                 {
-                    //Debug.Log("Te estoy viendo");
+                    Debug.Log("Te estoy viendo");
                     return true;
                 }
             }
         }
-      //  Debug.Log("No te estoy viendo");
+        Debug.Log("No te estoy viendo");
         return false;
     }
 
@@ -157,7 +160,7 @@ public class Player : MonoBehaviour
     void BehaviourCoolDown()
     {
         coolDown = false;
-       // Debug.Log("Cooldown terminado");
+        Debug.Log("Cooldown terminado");
     }
 
     void CatchTarget()
@@ -165,7 +168,7 @@ public class Player : MonoBehaviour
         if (role == PlayerRole.Cop && canCatchRobber)
         {
             canCatchRobber = false; // Activar cooldown
-          //  Debug.Log("¡Robber atrapado!");
+            Debug.Log("¡Robber atrapado!");
             LevelManager.Instance.RobberCaught(); // Notificar al LevelManager
             Destroy(target); // Eliminar al robber
             Invoke("ResetRobberCatch", 1.0f); // Reactivar la captura después de 1 segundo
@@ -189,6 +192,14 @@ public class Player : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
+        // Verificar si el jugador entró en un trigger con el tag "Cop" y es un Robber
+        if (other.CompareTag("Cop") && role == PlayerRole.Robber)
+        {
+            Debug.Log("Player Atrapado");
+            // Llamar al Game Over
+            LevelManager.Instance.GameOver();
+        }
+
         // Verificar si el jugador entró en un trigger con el tag "Money" o "Robber"
         if (other.CompareTag("Money") && canPickupMoney && role == PlayerRole.Robber)
         {

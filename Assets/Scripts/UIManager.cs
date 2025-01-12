@@ -6,10 +6,11 @@ public class UIManager : MonoBehaviour
 {
     public static UIManager Instance; // Singleton instance
 
-    public TextMeshProUGUI messageText; // Texto para mensajes (ej. "¡Nivel completado!")
     public TextMeshProUGUI moneyRobbersText; // Texto para mostrar el dinero recolectado
     public GameObject pauseMenu; // Menú de pausa
     public GameObject gameOverMenu; // Menú de fin de juego
+    public TextMeshProUGUI timerText; // Referencia al Text de UI para mostrar el tiempo
+    public TextMeshProUGUI levelText; // Referencia al Text de UI para mostrar el tiempo
 
     void Awake()
     {
@@ -28,9 +29,8 @@ public class UIManager : MonoBehaviour
     {
         // Inicializar la UI
         UpdateMoneyUI(0);
-        HideMessage();
         HidePauseMenu();
-        HideGameOverMenu();
+        UpdateLevel(1);
     }
 
     void Update()
@@ -42,24 +42,11 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    // Mostrar un mensaje en la pantalla
-    public void ShowMessage(string message, float duration = 2.0f)
-    {
-        messageText.text = message;
-        messageText.gameObject.SetActive(true);
-        Invoke("HideMessage", duration); // Ocultar el mensaje después de un tiempo
-    }
-
-    // Ocultar el mensaje
-    public void HideMessage()
-    {
-        messageText.gameObject.SetActive(false);
-    }
-
+   
     // Actualizar el contador de dinero
     public void UpdateMoneyUI(int money)
     {
-        moneyRobbersText.text = "Dinero: " + money;
+        moneyRobbersText.text = "Money: " + money;
     }
 
     public void UpdateRobbersLeft(int robbersLeft)
@@ -103,34 +90,25 @@ public class UIManager : MonoBehaviour
         gameOverMenu.SetActive(false);
     }
 
-    // Botones del menú de pausa
-    public void OnResumeButtonClicked()
-    {
-        TogglePauseMenu();
-    }
-
-    public void OnRestartButtonClicked()
-    {
-        Time.timeScale = 1; // Reanudar el tiempo
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name); // Reiniciar la escena
-    }
-
-    public void OnMainMenuButtonClicked()
-    {
-        Time.timeScale = 1; // Reanudar el tiempo
-        SceneManager.LoadScene("MainMenu"); // Cargar el menú principal
-    }
-
-    // Botones del menú de fin de juego
-    public void OnGameOverRestartButtonClicked()
-    {
-        Time.timeScale = 1; // Reanudar el tiempo
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name); // Reiniciar la escena
-    }
 
     public void OnGameOverMainMenuButtonClicked()
     {
         Time.timeScale = 1; // Reanudar el tiempo
         SceneManager.LoadScene("MainMenu"); // Cargar el menú principal
+    }
+
+    public void UpdateTimerUI(float currentTime)
+    {
+        if (timerText != null)
+        {
+            // Mostrar el tiempo en formato MM:SS
+            int minutes = Mathf.FloorToInt(currentTime / 60);
+            int seconds = Mathf.FloorToInt(currentTime % 60);
+            timerText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
+        }
+    }
+
+    public void UpdateLevel(int level){
+        levelText.text = "Level: " + level;
     }
 }
